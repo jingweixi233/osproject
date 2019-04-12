@@ -1,0 +1,5 @@
+module load!
+healthd: battery l=50 v=0 t=0.0 h=2 st=2 chg=a
+healthd: battery l=50 v=0 t=0.0 h=2 st=2 chg=a
+module exit!
+

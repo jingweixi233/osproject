@@ -1,0 +1,96 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{fontspec}
+\newfontfamily\menlo{Menlo}
+\usepackage{mathrsfs,euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage[vlined,ruled,linesnumbered]{algorithm2e}
+\hypersetup{colorlinks=true,linkcolor=black}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}
+\newtheorem*{solution}{Solution}
+\newtheorem*{instruction}{Instruction}
+\newtheorem{definition}{Definition}
+\theoremstyle{definition}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+ {\setlength{\epsfxsize}{#2\hsize}
+  \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+\makeatletter \renewenvironment{proof}[1][Proof] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+\makeatletter
+\renewenvironment{solution}[1][Solution] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+
+\begin{document}
+\noindent
+
+%========================================================================
+\noindent\framebox[\linewidth]{\shortstack[c]{
+\Large{\textbf{the Description of Problem 1}}\vspace{1mm}\\
+PsTree}}
+\begin{center}
+
+\footnotesize{\color{blue}$*$ Name: Gong Zheng  \quad Student ID: 5130309210 \quad Email: 573965625@qq.com}
+\end{center}
+\begin{enumerate}
+	\item \textbf{Files}
+	\begin{itemize}
+		\item pstree.c
+		\item Makefile
+	\end{itemize}
+
+	\item \textbf{How to operate}
+	\begin{itemize}
+		\item Use command $make$ to generate pstree.ko.
+		\item Use command $emulator\ –avd\ YourAvdName\ –kernel KernelLocation\ –show-kernel$ to start AVD with a new kernel.
+		\item Use command $adb\ push\ \#source path\#\ \#target\ path\ on\ device\#$ to push pstree.ko to AVD.
+		\item Use command $adb\ shell$ to use shell command like linux in AVD.
+		\item Use command $insmod\ pstree.ko$ to install mod.
+		\item Use command $lsmod$ to show whether the mod has been installed.
+	\end{itemize}
+
+	\item \textbf{Programming instructions}
+	\begin{itemize}
+		\item static int pstree(struct prinfo *buf, int *nr)
+		\begin{instruction}
+			\item
+			Call function $dfs$and use $read\_lock$ and $read\_unlock$ to protect the data. Then call function $copy\_pstree$ to copy data from task to buf.
+		\end{instruction}
+
+		\item void dfs(struct task\_struct \*start, int deep)
+		\begin{instruction}
+			\item
+			Call function $copyTask$ to traverse all data, use function $list_for_each$ to recursively call itself.
+		\end{instruction}
+
+		\item void copyTask(struct task\_struct \*task, struct prinfo \*target, int depth)
+		\begin{instruction}
+			\item
+			Called by $dfs$. in this function, copy those data from task[] to target[].
+		\end{instruction}
+	\end{itemize}
+
+\end{enumerate}
+%========================================================================
+\end{document}
