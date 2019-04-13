@@ -9,8 +9,8 @@
 #include<linux/slab.h>          // for memory allocation
 #include<linux/uaccess.h>       // for copy to user
 MODULE_LICENSE("Dual BSD/GPL");
-#define __NR_pstree 287
-const int N = 1000;
+#define __NR_ptree 356
+#define N 10000
 
 struct prinfo{
     pid_t parent_pid; 		    // process id of parent
@@ -26,16 +26,18 @@ struct prinfo{
 struct prinfo tasks[N];
 int k = 0;
 
-void dfs(struct tast_struct *node, int deep){
+static int (*oldcall)(void);
+void dfs(struct task_struct *node, int deep){
     struct task_struct *temptask;
     struct list_head *temp;
     struct prinfo *temp_prinfo;
     
-    if(node == NULL){
+    if(node == NULL || node -> comm == NULL){
         return;
     }
 
-    temp_prinfo = &task[k];
+    temp_prinfo = &tasks[k];
+
     temp_prinfo -> parent_pid = node -> parent -> pid;
     temp_prinfo -> pid = node -> pid;
     temp_prinfo -> state = node -> state;
@@ -45,34 +47,37 @@ void dfs(struct tast_struct *node, int deep){
     temp_prinfo -> first_child_pid = 0;
     temp_prinfo -> next_sibling_pid = 0;
 
+    k++;
+
     if(!list_empty(&node -> sibling)){
-        list_for_each(temp, node -> sibling){
-            temptask = list_entry(temp, task_struct, sibling);
-            if(temptask -> pid = node -> pid){
-                temptask = list_entry(temp -> next, task_struct, sibling);
+        list_for_each(temp, &node -> sibling){
+            temptask = list_entry(temp, struct task_struct, sibling);
+            if(temptask -> pid == node -> pid){
+                temptask = list_entry(temp -> next, struct task_struct, sibling);
                 temp_prinfo -> next_sibling_pid = temptask -> pid;
             }
         }
     }
 
     if(!list_empty(&node -> children)){
-        temp_prinfo -> first_child_pid = node -> children -> pid;
-        list_for_each(temp, node -> children){
-            temptask = list_entry(temp, task_struct, sibling);
+	temptask = list_entry(&node -> children, struct task_struct, sibling);
+        temp_prinfo -> first_child_pid = temptask -> pid;
+        list_for_each(temp, &node -> children){
+            temptask = list_entry(temp, struct task_struct, sibling);
             dfs(temptask, deep + 1);
         }
     }
 
-    k++;
+    
     
 }
 
 int ptree(struct prinfo *buf, int *nr){
 
     int i;
-    printf("start to dfs\n");
+    printk("start to dfs\n");
     dfs(&init_task, 0);
-    printf("dfs end\n");
+    printk("dfs end\n");
 
     *nr = k;
     for(i = 0; i < k; i++){
@@ -85,20 +90,21 @@ int ptree(struct prinfo *buf, int *nr){
         buf[i].uid = tasks[i].uid;
         buf[i].deep = tasks[i].deep;
     }
+    return 0;
 }
 
 static int addsyscall_init(void)
 {
     long *syscall = (long*)0xc000d8c4;
-    oldcall = (int(*)(void))(syscall[__NR_pstree]);
-    syscall[__NR_pstree] = (unsigned long)pstree;
+    oldcall = (int(*)(void))(syscall[__NR_ptree]);
+    syscall[__NR_ptree] = (unsigned long)ptree;
     printk(KERN_INFO "module load!\n");
     return 0;
 }
 static void addsyscall_exit(void)
 {
     long *syscall = (long*)0xc000d8c4;
-    syscall[__NR_pstree] = (unsigned long)oldcall;
+    syscall[__NR_ptree] = (unsigned long)oldcall;
     printk(KERN_INFO "module exit!\n");
 }
 
