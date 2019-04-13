@@ -4,7 +4,9 @@ Caesar cipher, is one of the simplest and most widely known encryption technique
 
  Plain: ABCDEFGHIJKLMNOPQRSTUVWXYZ 
 
- Cipher: DEFGHIJKLMNOPQRSTUVWXYZABC  Plain: abcdefghijklmnopqrstuvwxyz
+ Cipher: DEFGHIJKLMNOPQRSTUVWXYZABC 
+
+ Plain: abcdefghijklmnopqrstuvwxyz
 
  Cipher: defghijklmnopqrstuvwxyzabc
 
