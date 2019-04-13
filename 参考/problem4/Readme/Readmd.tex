@@ -1,0 +1,133 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{ctex}
+\usepackage{amsmath,amscd,amsbsy,amssymb,latexsym,url,bm,amsthm}
+\usepackage{epsfig,graphicx,subfigure}
+\usepackage{enumitem,balance}
+\usepackage{wrapfig}
+\usepackage{listings}
+\usepackage{fontspec}
+\newfontfamily\menlo{Menlo}
+\usepackage{mathrsfs,euscript}
+\usepackage[usenames]{xcolor}
+\usepackage{hyperref}
+\usepackage[vlined,ruled,linesnumbered]{algorithm2e}
+\hypersetup{colorlinks=true,linkcolor=black}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{exercise}{Exercise}
+\newtheorem*{solution}{Solution}
+\newtheorem*{instruction}{Instruction}
+\newtheorem{definition}{Definition}
+\theoremstyle{definition}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\newcommand{\postscript}[2]
+ {\setlength{\epsfxsize}{#2\hsize}
+  \centerline{\epsfbox{#1}}}
+
+\renewcommand{\baselinestretch}{1.0}
+
+\setlength{\oddsidemargin}{-0.365in}
+\setlength{\evensidemargin}{-0.365in}
+\setlength{\topmargin}{-0.3in}
+\setlength{\headheight}{0in}
+\setlength{\headsep}{0in}
+\setlength{\textheight}{10.1in}
+\setlength{\textwidth}{7in}
+\makeatletter \renewenvironment{proof}[1][Proof] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+\makeatletter
+\renewenvironment{solution}[1][Solution] {\par\pushQED{\qed}\normalfont\topsep6\p@\@plus6\p@\relax\trivlist\item[\hskip\labelsep\bfseries#1\@addpunct{.}]\ignorespaces}{\popQED\endtrivlist\@endpefalse} \makeatother
+
+\begin{document}
+\noindent
+
+%========================================================================
+\noindent\framebox[\linewidth]{\shortstack[c]{
+\Large{\textbf{the Description of Problem 4}}\vspace{1mm}\\
+Server and Client}}
+\begin{center}
+
+\footnotesize{\color{blue}$*$ Name: Gong Zheng  \quad Student ID: 5130309210 \quad Email: 573965625@qq.com}
+\end{center}
+\begin{enumerate}
+	\item \textbf{Files}
+	\begin{itemize}
+		\item server.c
+		\item client.c
+	\end{itemize}
+
+	\item \textbf{How to operate}
+	\begin{itemize}
+		\item Use command $gcc server.c -o server -lpthread$ to generate server. 
+		\item Use command $gcc client.c -o client $ generate client.
+		\item Use command $./server$ to run server.
+		\item Use many commands $./client$ to run many clients. You can send message in cmd. Then you while receive 2 types of answer:
+		\begin{itemize}
+			\item the transfered message.
+			\item Please wait, which means there has been 2 other clients used. You can send message to ensure whether you can use it.
+		\end{itemize}
+		\item  {\color{red}Warning!} only allow $:q$ to end a client.
+	\end{itemize}
+
+	\item \textbf{Programming instructions}
+
+	Client.c
+	\begin{itemize}
+		\item bzero(buffer, 256); fgets(buffer, 255, stdin); n = write(sockfd, buffer, strlen(buffer));
+
+		\begin{instruction}
+			\item
+			To clear the buffer and get and send message from you to server.
+		\end{instruction}
+
+		\item if (buffer[0] == ':' \&\& buffer[1] == 'q' \&\& strlen(buffer) == 3)
+		\begin{instruction}
+			\item
+			To probe quit signal.
+		\end{instruction}
+
+		\item bzero(buffer,256); n = read(sockfd,buffer,255); printf("\%s",buffer);
+		\begin{instruction}
+			\item
+			To clear the buffer and receive and show message from server to you.
+		\end{instruction}
+	\end{itemize}
+
+	Server.c
+	\begin{itemize}
+		\item main()
+		\begin{itemize}
+			\item \textbf{listen(sockfd, 5);} To listen pthread.
+			\item \textbf{newsockfd = accept(sockfd, (struct sockaddr \*)\&cli\_addr, \&clilen)} If one pthread has been listened, accept it and store filede scriptor to newsockfd.
+			\item \textbf{if(pthread\_create(\&serve\_thread, NULL, serve, \&newsockfd) != 0)} Use newsockfd to call serve function to work for client.
+		\end{itemize}
+
+
+		\item serve()
+		\begin{itemize}
+			\item \textbf{if(size\_server < 2)}client can run directly.
+			\begin{itemize}
+			 	\item \textbf{pthread\_mutex\_lock;	size\_server++; pthread\_mutex\_unlock;} a new client added, serve\_mutex used to protect data.
+				\item \textbf{n = read(newsockfd, buffer, 255);} receive message from client to server.
+				\item \textbf{if (buffer[0] == ':' \&\& buffer[1] == 'q' \&\& strlen(buffer) == 3)} To probe quit signal. In this judgment statement, you can sub size\_server during protection of serve\_mutex.
+				\item \textbf{solve1(buffer, n -1)} transfer the message.
+				\item \textbf{write(newsockfg, buffer, n)} send message from server to client.
+			\end{itemize}
+			\item \textbf{if(size\_server == 2)}client need to wait.
+
+			This part is similar with the previous. The diffrent is that there are another semaphore: wait\_mutex.
+
+			Each time server receive message from client, it will lock the semaphore and judge that if ther size\_server < 2. If right, then add the size\_server and unlock the semaphore and do whatever like previous part, which means another wait client cannot coming at same time. If not, just tell client "Please wait!" and then releaser the semaphore.
+		\end{itemize}
+		\item solve1()
+		Just for transfer.
+		\item solve2()
+		Just for wait message.
+	\end{itemize}
+\end{enumerate}
+%========================================================================
+\end{document}

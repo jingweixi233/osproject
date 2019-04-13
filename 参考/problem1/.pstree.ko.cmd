@@ -1,0 +1,1 @@
+cmd_/home/loong/cs356/problem1/pstree.ko := arm-linux-androideabi-ld -r  -T /home/loong/app/kernel/goldfish/scripts/module-common.lds --build-id  -o /home/loong/cs356/problem1/pstree.ko /home/loong/cs356/problem1/pstree.o /home/loong/cs356/problem1/pstree.mod.o
