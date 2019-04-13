@@ -9,8 +9,8 @@
 #include<linux/slab.h>          // for memory allocation
 #include<linux/uaccess.h>       // for copy to user
 MODULE_LICENSE("Dual BSD/GPL");
-#define __NR_ptree 391
-#define N 1000
+#define __NR_ptree 356
+#define N 10000
 
 struct prinfo{
     pid_t parent_pid; 		    // process id of parent
@@ -32,11 +32,12 @@ void dfs(struct task_struct *node, int deep){
     struct list_head *temp;
     struct prinfo *temp_prinfo;
     
-    if(node == NULL){
+    if(node == NULL || node -> comm == NULL){
         return;
     }
 
     temp_prinfo = &tasks[k];
+
     temp_prinfo -> parent_pid = node -> parent -> pid;
     temp_prinfo -> pid = node -> pid;
     temp_prinfo -> state = node -> state;
@@ -45,6 +46,8 @@ void dfs(struct task_struct *node, int deep){
     temp_prinfo -> deep = deep;
     temp_prinfo -> first_child_pid = 0;
     temp_prinfo -> next_sibling_pid = 0;
+
+    k++;
 
     if(!list_empty(&node -> sibling)){
         list_for_each(temp, &node -> sibling){
@@ -65,7 +68,7 @@ void dfs(struct task_struct *node, int deep){
         }
     }
 
-    k++;
+    
     
 }
 
