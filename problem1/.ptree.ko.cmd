@@ -1,0 +1,1 @@
+cmd_/home/jingweixi/Documents/osproject/problem1/ptree.ko := arm-linux-androideabi-ld -r  -T /usr/lib/oskernel/kernel/goldfish/scripts/module-common.lds --build-id  -o /home/jingweixi/Documents/osproject/problem1/ptree.ko /home/jingweixi/Documents/osproject/problem1/ptree.o /home/jingweixi/Documents/osproject/problem1/ptree.mod.o

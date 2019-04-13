@@ -1,0 +1,1 @@
+emulator –avd os1 –kernel /usr/lib/oskernel/kernel/goldfish/arch/arm/boot/zImage –show-kernel
