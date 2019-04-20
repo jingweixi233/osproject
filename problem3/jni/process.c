@@ -1,3 +1,6 @@
+//xi jingwei
+//oprating system problem3
+
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <stdio.h>

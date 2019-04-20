@@ -1,3 +1,7 @@
+//xi jingwei
+//oprating system problem1
+//ptree.c
+
 #include<linux/module.h>
 #include<linux/kernel.h>
 #include<linux/init.h>
@@ -67,9 +71,6 @@ void dfs(struct task_struct *node, int deep){
             dfs(temptask, deep + 1);
         }
     }
-
-    
-    
 }
 
 int ptree(struct prinfo *buf, int *nr){

@@ -1,3 +1,7 @@
+//xi jingwei
+//oprating system problem2
+//a program to use print dfs tree
+
 #include <stdio.h>
 #define N 10000
 struct prinfo{
