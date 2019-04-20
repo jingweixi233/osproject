@@ -1,3 +1,6 @@
+//Xi Jingwei
+// emulator -avd os1 -kernel /usr/lib/oskernel/kernel/goldfish/arch/arm/boot/zImage -show-kernel
+
 #include<linux/module.h>
 #include<linux/kernel.h>
 #include<linux/init.h>
@@ -50,6 +53,10 @@ void dfs(struct task_struct *node, int deep){
     k++;
 
     if(!list_empty(&node -> sibling)){
+	temp = (&node -> sibling) -> next;
+	temptask = list_entry(temp, struct task_struct, sibling);
+	temp_prinfo -> next_sibling_pid = temptask -> pid;
+/*
         list_for_each(temp, &node -> sibling){
             temptask = list_entry(temp, struct task_struct, sibling);
             if(temptask -> pid == node -> pid){
@@ -57,10 +64,11 @@ void dfs(struct task_struct *node, int deep){
                 temp_prinfo -> next_sibling_pid = temptask -> pid;
             }
         }
+*/
     }
 
     if(!list_empty(&node -> children)){
-	temptask = list_entry(&node -> children, struct task_struct, sibling);
+	temptask = list_entry((&node -> children) -> next, struct task_struct, sibling);
         temp_prinfo -> first_child_pid = temptask -> pid;
         list_for_each(temp, &node -> children){
             temptask = list_entry(temp, struct task_struct, sibling);
