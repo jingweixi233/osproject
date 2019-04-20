@@ -1,11 +1,7 @@
-<<<<<<< HEAD
 //xi jingwei
 //oprating system problem1
 //ptree.c
-=======
-//Xi Jingwei
-// emulator -avd os1 -kernel /usr/lib/oskernel/kernel/goldfish/arch/arm/boot/zImage -show-kernel
->>>>>>> c7d54bb274e27064bbbc481a76f1d0141d1bf6e3
+
 
 #include<linux/module.h>
 #include<linux/kernel.h>
@@ -59,18 +55,9 @@ void dfs(struct task_struct *node, int deep){
     k++;
 
     if(!list_empty(&node -> sibling)){
-	temp = (&node -> sibling) -> next;
-	temptask = list_entry(temp, struct task_struct, sibling);
-	temp_prinfo -> next_sibling_pid = temptask -> pid;
-/*
-        list_for_each(temp, &node -> sibling){
-            temptask = list_entry(temp, struct task_struct, sibling);
-            if(temptask -> pid == node -> pid){
-                temptask = list_entry(temp -> next, struct task_struct, sibling);
-                temp_prinfo -> next_sibling_pid = temptask -> pid;
-            }
-        }
-*/
+	    temp = (&node -> sibling) -> next;
+	    temptask = list_entry(temp, struct task_struct, sibling);
+	    temp_prinfo -> next_sibling_pid = temptask -> pid;
     }
 
     if(!list_empty(&node -> children)){
