@@ -1,4 +1,4 @@
-This is a project on CS356 operating system in SJTU.
+This is a project for Operating System in Android kernel.
 
 Problem1
 
